@@ -24,4 +24,26 @@ To spin up an Ubuntu instance using `rust` and `cargo` to build Solana for a loc
 ./spin_up_rust_builder.sh
 ```
 
-More on this to come...
+On my machine it took 38m35s to build everything.
+
+```
+[2022-06-21T18:11:56.465] [debug] [tenacious-sapsucker] Running: VBoxManage, startvm, tenacious-sapsucker, --type, headless
+
+Launched: tenacious-sapsucker
+
+real    38m35.442s
+user    0m0.000s
+sys     0m0.015s
+```
+
+## Shell Into Solana Builder to Run Multi-Node Demo
+
+Once the rust build is complete, connect to the new instance. In this example the name of the instance is `tenacious-sapsucker`. Yours will most likely be different.
+
+To access the Ubuntu instance: `multipass shell tenacious-sapsucker`.
+
+You will now be in an Ubuntu bash shell. To initiate the multi-node demo:
+
+```
+./solana/multinode-demo/setup.sh
+```
