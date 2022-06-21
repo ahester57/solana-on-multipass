@@ -79,4 +79,10 @@ ubuntu@tenacious-sapsucker:~$ cd solana
 ubuntu@tenacious-sapsucker:~$ NDEBUG=1 ./multinode-demo/setup.sh
 ```
 
+### Note on "Illegal Instruction" Error
+
+During generation of genesis, I ran into issue of `Illegal Instruction`, probably due to lack of AVX due to Hyper-V. Apparently, AVX and Hypervisor are mutually exclusive.
+
+I followed the steps [here to disable Hyper-V](https://stackoverflow.com/a/68214280). On Step 3 of that StackOverflow link, I had to change `Microsoft-Hyper-V` to `HypervisorPlatform`, otherwise it worked for me.
+
 ----
