@@ -14,7 +14,9 @@ rustup component add rustfmt
 git clone https://github.com/solana-labs/solana.git
 cd solana
 ./scripts/cargo-install-all.sh .
-echo 'export PATH=$(pwd)/bin:"$PATH"' >> ~/.profile
+export SOLANA_BIN="$(pwd)/bin"
+echo $SOLANA_BIN
+echo 'export PATH=$SOLANA_BIN:"$PATH"' >> ~/.profile
 # source ~/.profile
 
 #multipass launch 20.04 --mem 4G --disk 20G --timeout 8000 --cloud-init solana-config.yaml -vvvv
