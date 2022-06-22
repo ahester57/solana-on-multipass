@@ -13,7 +13,7 @@ I am using a tool called [`multipass`](https://github.com/canonical/multipass) f
 To spin up an Ubuntu instance with [`solana`](https://github.com/solana-labs/solana) installed ([more info](https://docs.solana.com/introduction)) =:  
 
 ```ruby
-./spin_up_new_simple_node.sh
+ahester@DESKTOP:~$ ./spin_up_new_simple_node.sh
 ```
 
 On my machine in took 1m55s to build the simple node.
@@ -28,7 +28,7 @@ user    0m0.000s
 sys     0m0.015s
 ```
 
-The above script uses a Cloud Config ([more info](https://cloudinit.readthedocs.io/en/latest/topics/examples.html)) file, `solana-config.yaml`, in addition to command line arguments passed to the `multipass` command to spin up a new instance of Ubuntu.  
+The above script uses a [Cloud Config](https://cloudinit.readthedocs.io/en/latest/topics/examples.html) file, `solana-config.yaml`, in addition to command line arguments passed to the `multipass` command to spin up a new instance of Ubuntu.  
 
 This simple Solana node is able to run solana commands, but is not set up for local testnet.
 
@@ -43,13 +43,13 @@ This simple Solana node is able to run solana commands, but is not set up for lo
 To spin up an Ubuntu instance using `rust` and `cargo` to build Solana for a local testnet:
 
 ```ruby
-./spin_up_rust_builder.sh
+ahester@DESKTOP:~$ ./spin_up_rust_builder.sh
 ```
 
 On my machine it took 47m10s to build everything.
 
 ```ruby
-[2022-06-21T18:11:56.465] [debug] [pacific-salmon] Running: VBoxManage, startvm, tenacious-sapsucker, --type, headless
+[2022-06-21T18:11:56.465] [debug] [pacific-salmon] Running: VBoxManage, startvm, pacific-salmon, --type, headless
 
 Launched: pacific-salmon
 
