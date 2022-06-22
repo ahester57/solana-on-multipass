@@ -21,6 +21,16 @@ system_info:
   default_user:
     name: ubuntu
     shell: /bin/bash
+network:
+  version: 2
+  renderer: NetworkManager
+write_files:
+- content: |
+    export PATH=/home/ubuntu/.local/share/solana/install/manual_build/bin:$PATH
+  path: /home/ubuntu/.profile
+  owner: ubuntu:ubuntu
+  append: true
+  defer: true
 runcmd:
     # Rust is only need if you want to build yourself.
   - 'echo INSTALL RUST'
@@ -32,5 +42,4 @@ runcmd:
   - 'echo INSTALL SOLANA'
   - 'su ubuntu -c "cd ~ && git clone https://github.com/solana-labs/solana.git"'
   - 'su ubuntu -c "cd ~/solana && git checkout $(git describe --tags $(git rev-list --tags --max-count=1))"'
-  - 'su ubuntu -c "source ~/.cargo/env && cd ~/solana && cargo build --release"'
-  - 'su ubuntu -c "echo source ~/solana/target/release >> ~/.profile"'
+  - 'su ubuntu -c "source ~/.cargo/env && cd ~/solana && ./scripts/cargo-install-all.sh ~/.local/share/solana/install/manual_build"'

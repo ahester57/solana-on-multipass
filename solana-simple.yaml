@@ -7,6 +7,9 @@ system_info:
   default_user:
     name: ubuntu
     shell: /bin/bash
+network:
+  version: 2
+  renderer: NetworkManager
 runcmd:
   - 'echo INSTALL SOLANA'
   - 'su ubuntu -c "curl -SfL https://release.solana.com/v1.10.25/install | sh -s"'
