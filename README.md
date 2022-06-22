@@ -175,10 +175,16 @@ ubuntu@rust-builder:~$ NDEBUG=1 ./multinode-demo/setup.sh
 
 ----
 
-### Note on "Illegal Instruction" Error
+## Note on "Illegal Instruction" Error
 
-During generation of genesis, I ran into issue of `Illegal Instruction`, probably due to lack of AVX due to Hyper-V. Apparently, AVX and Hypervisor are mutually exclusive.
+During generation of genesis, I ran into issue of `Illegal Instruction`, probably due to lack of `AVX` and `AVX2` CPU flags due to Hypervisor. Apparently, AVX and Hypervisor are mutually exclusive.
 
-I followed the steps [here to disable Hyper-V](https://stackoverflow.com/a/68214280). On Step 3 of that StackOverflow link, I had to change `Microsoft-Hyper-V` to `HypervisorPlatform`, otherwise it worked for me.
+To [disable Hyper-V in Windows Powershell](https://docs.microsoft.com/en-us/troubleshoot/windows-client/application-management/virtualization-apps-not-work-with-hyper-v):
+
+```python
+Disable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-Hypervisor
+```
+
+An alternative way to [disable Hyper-V using `cmd`](https://stackoverflow.com/a/68214280) . I had to change `Microsoft-Hyper-V` to `HypervisorPlatform`, otherwise it worked for me.
 
 ----
