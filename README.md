@@ -12,13 +12,13 @@ I am using a tool called [`multipass`](https://github.com/canonical/multipass) f
 
 To spin up an Ubuntu instance with [`solana`](https://github.com/solana-labs/solana) installed ([more info](https://docs.solana.com/introduction)) =:  
 
-```ruby
+```python
 ahester@DESKTOP:~$ ./spin_up_new_simple_node.sh
 ```
 
 On my machine in took 1m55s to build the simple node.
 
-```ruby
+```python
 [2022-06-21T20:43:21.816] [debug] [veteran-dory] Running: VBoxManage, startvm, veteran-dory, --type, headless
 
 Launched: veteran-dory
@@ -42,32 +42,39 @@ This simple Solana node is able to run solana commands, but is not set up for lo
 
 To spin up an Ubuntu instance using `rust` and `cargo` to build Solana for a local testnet:
 
-```ruby
+```python
 ahester@DESKTOP:~$ ./spin_up_rust_builder.sh
 ```
 
 On my machine it took 47m10s to build everything.
 
-```ruby
-[2022-06-21T18:11:56.465] [debug] [pacific-salmon] Running: VBoxManage, startvm, pacific-salmon, --type, headless
+```python
+[2022-06-21T18:11:56.465] [debug] [rust-builder] Running: VBoxManage, startvm, rust-builder, --type, headless
 
-Launched: pacific-salmon
+Launched: rust-builder
 
 real    47m10.076s
 user    0m0.000s
 sys     0m0.000s
 ```
 
+After building, the `spin_up_rust_builder.sh` script then:
+
+* Mounts the `build_mount` directory to the same directory in `rust-builder:~/build_mount`.
+* Copies the just-built binaries for your virtual Ubuntu instance to the `build_mount/manual_build` directory.
+
+The `build_mount/manual_build` directory is then used to speed up launches of new instances.
+
 ----
 
 ## Shell Into Solana Builder
 
-Once the rust build is complete, connect to the new instance. In this example the name of the instance is `pacific-salmon`. Yours will most likely be different.
+Once the rust build is complete, connect to the new instance. In this example the name of the instance is `rust-builder`. Yours will most likely be different.
 
 To access the Ubuntu instance: 
 
-```ruby
-ahester@DESKTOP:~$ multipass shell pacific-salmon
+```python
+ahester@DESKTOP:~$ multipass shell rust-builder
 ```
 
 ----
@@ -80,20 +87,20 @@ One of the easiest ways to get a Solana [On-Chain Program](https://docs.solana.c
 
 Check you Solana wallet's balance with:
 
-```ruby
+```python
 solana balance
 ```
 
 If you have yet to create a Solana wallet, you'll see something like:
 
-```ruby
+```python
 Error: Dynamic program error: No default signer found, run "solana-keygen new -o /home/ubuntu/.config/solana/id.json" to create a new one
 ```
 
-Run the command it suggests to create your wallet. The output of that command on `pacific-salmon`:
+Run the command it suggests to create your wallet. The output of that command on `rust-builder`:
 
-```ruby
-ubuntu@pacific-salmon:~$ solana-keygen new -o ~/.config/solana/id.json
+```python
+ubuntu@rust-builder:~$ solana-keygen new -o ~/.config/solana/id.json
 Generating a new keypair
 
 For added security, enter a BIP39 passphrase
@@ -115,8 +122,8 @@ Save this seed phrase and your BIP39 passphrase to recover your new keypair:
 
 Now you can start you single-node cluster:
 
-```ruby
-ubuntu@pacific-salmon:~$ solana-test-validator
+```python
+ubuntu@rust-builder:~$ solana-test-validator
 Ledger location: test-ledger
 Log: test-ledger/validator.log
 ⠲ Initializing...
@@ -131,10 +138,10 @@ JSON RPC URL: http://127.0.0.1:8899
 ⠠ 00:00:22 | Processed Slot: 48 | Confirmed Slot: 48 | Finalized Slot: 16 | Full
 ```
 
-Next configure your Solana [CLI Tool Suite](https://docs.solana.com/cli) to use your local JSON RPC connection. Note that I am running this command from within the virtual Ubuntu instance called `pacific-salmon`. The URL given in the command should match the `JSON RPC URL` printed by `solana-test-validator`.
+Next configure your Solana [CLI Tool Suite](https://docs.solana.com/cli) to use your local JSON RPC connection. Note that I am running this command from within the virtual Ubuntu instance called `rust-builder`. The URL given in the command should match the `JSON RPC URL` printed by `solana-test-validator`.
 
-```ruby
-ubuntu@pacific-salmon:~$ solana config set --url http://127.0.0.1:8899
+```python
+ubuntu@rust-builder:~$ solana config set --url http://127.0.0.1:8899
 Config File: /home/ubuntu/.config/solana/cli/config.yml
 RPC URL: http://127.0.0.1:8899
 WebSocket URL: ws://127.0.0.1:8900/ (computed)
@@ -144,8 +151,8 @@ Commitment: confirmed
 
 To confirm the configuration is pointing at your local test network, run `solana genesis-hash` and ensure the output matches the `Genesis Hash` printed by `solana-test-validator`.
 
-```ruby
-ubuntu@pacific-salmon:~$ solana genesis-hash
+```python
+ubuntu@rust-builder:~$ solana genesis-hash
 H1iw5ZNxEZQB9Qs81TfYDwM2TbyrZ2e4TERdLQpEGdNs
 ```
 
@@ -157,9 +164,9 @@ If the Test Validator is not enough for you and you want to [setup the multi-nod
 
 ### Generate Genesis
 
-```ruby
-ubuntu@pacific-salmon:~$ cd solana
-ubuntu@pacific-salmon:~$ NDEBUG=1 ./multinode-demo/setup.sh
+```python
+ubuntu@rust-builder:~$ cd solana
+ubuntu@rust-builder:~$ NDEBUG=1 ./multinode-demo/setup.sh
 ```
 
 ### TBA
