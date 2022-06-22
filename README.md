@@ -12,13 +12,13 @@ I am using a tool called [`multipass`](https://github.com/canonical/multipass) f
 
 To spin up an Ubuntu instance with [`solana`](https://github.com/solana-labs/solana) installed ([more info](https://docs.solana.com/introduction)) =:  
 
-```
+```ruby
 ./spin_up_new_simple_node.sh
 ```
 
 On my machine in took 1m55s to build the simple node.
 
-```
+```ruby
 [2022-06-21T20:43:21.816] [debug] [veteran-dory] Running: VBoxManage, startvm, veteran-dory, --type, headless
 
 Launched: veteran-dory
@@ -32,7 +32,7 @@ The above script uses a Cloud Config ([more info](https://cloudinit.readthedocs.
 
 This simple Solana node is able to run solana commands, but is not set up for local testnet.
 
-:information_source: We need to build from source if we want to run the local testnet demo.
+:information_source: We need to build from source if we want to run the local testnet demo in virtual environment.
 
 ----
 
@@ -42,42 +42,129 @@ This simple Solana node is able to run solana commands, but is not set up for lo
 
 To spin up an Ubuntu instance using `rust` and `cargo` to build Solana for a local testnet:
 
-```
+```ruby
 ./spin_up_rust_builder.sh
 ```
 
-On my machine it took 38m35s to build everything.
+On my machine it took 47m10s to build everything.
 
-```
-[2022-06-21T18:11:56.465] [debug] [tenacious-sapsucker] Running: VBoxManage, startvm, tenacious-sapsucker, --type, headless
+```ruby
+[2022-06-21T18:11:56.465] [debug] [pacific-salmon] Running: VBoxManage, startvm, tenacious-sapsucker, --type, headless
 
-Launched: tenacious-sapsucker
+Launched: pacific-salmon
 
-real    38m35.442s
+real    47m10.076s
 user    0m0.000s
-sys     0m0.015s
+sys     0m0.000s
 ```
 
 ----
 
-## Shell Into Solana Builder to Run Multi-Node Demo
+## Shell Into Solana Builder
 
-Once the rust build is complete, connect to the new instance. In this example the name of the instance is `tenacious-sapsucker`. Yours will most likely be different.
+Once the rust build is complete, connect to the new instance. In this example the name of the instance is `pacific-salmon`. Yours will most likely be different.
 
 To access the Ubuntu instance: 
 
+```ruby
+ahester@DESKTOP:~$ multipass shell pacific-salmon
 ```
-ahester@DESKTOP:~$ multipass shell tenacious-sapsucker
+
+----
+
+## Local Single-Node Cluster
+
+One of the easiest ways to get a Solana [On-Chain Program](https://docs.solana.com/developing/on-chain-programs/overview) running is to use the [`solana_test_validator`]().
+
+> During early stage development, it is often convenient to target a cluster with fewer restrictions and more configuration options than the public offerings provide. This is easily achieved with the `solana-test-validator` binary, which starts a full-featured, single-node cluster on the developer's workstation.  
+
+Check you Solana wallet's balance with:
+
+```ruby
+solana balance
 ```
+
+If you have yet to create a Solana wallet, you'll see something like:
+
+```ruby
+Error: Dynamic program error: No default signer found, run "solana-keygen new -o /home/ubuntu/.config/solana/id.json" to create a new one
+```
+
+Run the command it suggests to create your wallet. The output of that command on `pacific-salmon`:
+
+```ruby
+ubuntu@pacific-salmon:~$ solana-keygen new -o ~/.config/solana/id.json
+Generating a new keypair
+
+For added security, enter a BIP39 passphrase
+
+NOTE! This passphrase improves security of the recovery seed phrase NOT the
+keypair file itself, which is stored as insecure plain text
+
+BIP39 Passphrase (empty for none):
+Enter same passphrase again:
+
+Wrote new keypair to /home/ubuntu/.config/solana/id.json
+============================================================================
+pubkey: D7YKR8P1wrTS7L4fVxA7ziK4UnTNnjGkFfygicgCPsu8
+============================================================================
+Save this seed phrase and your BIP39 passphrase to recover your new keypair:
+---- -------- ------ -------- ----- -------- ------- ------ --------- -----
+============================================================================
+```
+
+Now you can start you single-node cluster:
+
+```ruby
+ubuntu@pacific-salmon:~$ solana-test-validator
+Ledger location: test-ledger
+Log: test-ledger/validator.log
+⠲ Initializing...
+⠄ Initializing...
+Identity: Hnz2PxcVqZUkxrr6bbsU6ZcKn7jko1JFNAMbWLrKHXdQ
+Genesis Hash: H1iw5ZNxEZQB9Qs81TfYDwM2TbyrZ2e4TERdLQpEGdNs
+Version: 1.11.1
+Shred Version: 54048
+Gossip Address: 127.0.0.1:1024
+TPU Address: 127.0.0.1:1027
+JSON RPC URL: http://127.0.0.1:8899
+⠠ 00:00:22 | Processed Slot: 48 | Confirmed Slot: 48 | Finalized Slot: 16 | Full
+```
+
+Next configure your Solana [CLI Tool Suite](https://docs.solana.com/cli) to use your local JSON RPC connection. Note that I am running this command from within the virtual Ubuntu instance called `pacific-salmon`. The URL given in the command should match the `JSON RPC URL` printed by `solana-test-validator`.
+
+```ruby
+ubuntu@pacific-salmon:~$ solana config set --url http://127.0.0.1:8899
+Config File: /home/ubuntu/.config/solana/cli/config.yml
+RPC URL: http://127.0.0.1:8899
+WebSocket URL: ws://127.0.0.1:8900/ (computed)
+Keypair Path: /home/ubuntu/.config/solana/id.json
+Commitment: confirmed
+```
+
+To confirm the configuration is pointing at your local test network, run `solana genesis-hash` and ensure the output matches the `Genesis Hash` printed by `solana-test-validator`.
+
+```ruby
+ubuntu@pacific-salmon:~$ solana genesis-hash
+H1iw5ZNxEZQB9Qs81TfYDwM2TbyrZ2e4TERdLQpEGdNs
+```
+
+----
+
+## Local Multi-Node Cluster
+
+If the Test Validator is not enough for you and you want to [setup the multi-node demo](https://docs.solana.com/cluster/bench-tps#configuration-setup):
 
 ### Generate Genesis
 
-You will now be in a virtual Ubuntu bash shell. To [setup the multi-node demo](https://docs.solana.com/cluster/bench-tps#configuration-setup):
+```ruby
+ubuntu@pacific-salmon:~$ cd solana
+ubuntu@pacific-salmon:~$ NDEBUG=1 ./multinode-demo/setup.sh
+```
 
-```
-ubuntu@tenacious-sapsucker:~$ cd solana
-ubuntu@tenacious-sapsucker:~$ NDEBUG=1 ./multinode-demo/setup.sh
-```
+### TBA
+
+----
 
 ### Note on "Illegal Instruction" Error
 
