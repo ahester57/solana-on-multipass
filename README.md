@@ -1,4 +1,4 @@
-# POC - Solana Blockchain Gift Card
+# POC - Solana on Multipass
 
 ## Prerequisites
 
@@ -64,6 +64,8 @@ After building, the `spin_up_rust_builder.sh` script then:
 * Copies the just-built binaries for your virtual Ubuntu instance to the `build_mount/manual_build` directory.
 
 The `build_mount/manual_build` directory is then used to speed up launches of new instances.
+
+*Note: The action of mounting the directory using `multipass` will install `multipass-sshfs` on the target machine using the snap store.*
 
 ----
 
