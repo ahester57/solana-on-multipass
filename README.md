@@ -149,6 +149,24 @@ ubuntu@solana-rust-builder:~$ solana genesis-hash
 H1iw5ZNxEZQB9Qs81TfYDwM2TbyrZ2e4TERdLQpEGdNs
 ```
 
+### Check Your Enabled Features
+
+After configuring your Solana CLI tools to point to your local validator, you can check the feature supported by your client with:
+
+```python
+ubuntu@solana-rust-builder:~$ solana feature status -ul
+
+...
+
+Tool Software Version: 1.11.1
+Software Version    Stake      RPC
+1.11.1            100.00%  100.00%  <-- me
+
+Tool Feature Set: 499180940
+Software Version  Feature Set    Stake      RPC
+1.11.1              499180940  100.00%  100.00%  <-- me
+```
+
 ----
 
 ## Spin Up Solana Node Quickly From Prebuilt Binaries
@@ -160,7 +178,7 @@ To spin up an Ubuntu instance called `solana-quick-node` with [`solana`](https:/
 
 :warning: Before spinning up your new node, on your machine run:
 
-```
+```python
 :~$ multipass networks
 ```
 
