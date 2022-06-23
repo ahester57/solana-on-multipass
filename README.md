@@ -167,6 +167,14 @@ Software Version  Feature Set    Stake      RPC
 1.11.1              499180940  100.00%  100.00%  <-- me
 ```
 
+### Get Money
+
+To get money:
+
+```python
+ubuntu@solana-rust-builder:~$ solana airdrop 1000000
+```
+
 ----
 
 ## Spin Up Solana Node Quickly From Prebuilt Binaries
