@@ -4,8 +4,6 @@ package_upgrade: true
 package_reboot_if_required: true
 packages:
     # The following packages should be installed if you want to build yourself. that takes 45 min on a Ryzen 5 5600X at 4.2 GHz. do not recommend.
-  - build-essential
-  - gcc-multilib
   - libssl-dev
   - libudev-dev
   - pkg-config
@@ -16,6 +14,7 @@ packages:
   - make
   - libprotobuf-dev
   - protobuf-compiler
+  - sshfs # for multipass mount
 system_info:
   distro: ubuntu
   default_user:

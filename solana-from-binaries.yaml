@@ -1,0 +1,21 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+package_reboot_if_required: true
+packages:
+  - sshfs # for multipass mount
+system_info:
+  distro: ubuntu
+  default_user:
+    name: ubuntu
+    shell: /bin/bash
+network:
+  version: 2
+  renderer: NetworkManager
+write_files:
+- content: |
+    export PATH=/home/ubuntu/.local/share/solana/install/manual_build/bin:$PATH
+  path: /home/ubuntu/.profile
+  owner: ubuntu:ubuntu
+  append: true
+  defer: true
