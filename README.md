@@ -4,10 +4,9 @@
 
 This document assumes you have some virtualization software installed on your machine. I am using VirtualBox on Win10.
 
-* >15 GB of free disk space for `solana-rust-builder`
-* Additional 10 GB of free disk space for `solana-quick-node`
-
-I am using a tool called [`multipass`](https://github.com/canonical/multipass) from Canonical ([more info](https://multipass.run/)) to spin up Ubuntu VMs.  
+* > 15 GB of free disk space for `solana-rust-builder`
+* > Additional 10 GB of free disk space for `solana-quick-node`
+* > I am using a tool called [`multipass`](https://github.com/canonical/multipass) from Canonical ([more info](https://multipass.run/)) to spin up Ubuntu VMs.  
 
 ----
 
