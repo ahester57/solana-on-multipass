@@ -19,3 +19,10 @@ write_files:
   owner: ubuntu:ubuntu
   append: true
   defer: true
+runcmd:
+  - 'echo INSTALL RUST'
+  - 'su ubuntu -c "curl --tlsv1.2 https://sh.rustup.rs -Sf | sh -s -- -y"'
+  - 'su ubuntu -c "echo source ~/.cargo/env >> ~/.profile"'
+  - 'echo UPDATE RUST'
+  - 'su ubuntu -c "source ~/.cargo/env && rustup update"'
+  - 'su ubuntu -c "source ~/.cargo/env && rustup component add rustfmt"'

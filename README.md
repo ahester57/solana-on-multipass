@@ -5,7 +5,7 @@
 This document assumes you have some virtualization software installed on your machine. I am using VirtualBox on Win10.
 
 * > 15 GB of free disk space for `solana-rust-builder`
-* > Additional 10 GB of free disk space for `solana-quick-node`
+* > Additional 15 GB of free disk space for `solana-quick-node`
 * > I am using a tool called [`multipass`](https://github.com/canonical/multipass) from Canonical ([more info](https://multipass.run/)) to spin up Ubuntu VMs.  
 
 ----
@@ -40,6 +40,7 @@ sys     0m0.000s
 
 After building, the `spin_up_rust_builder.sh` script then:
 
+* Install `rust` and `cargo`.
 * Mounts the source machine's `build_mount` directory to the same directory in `solana-rust-builder:~/build_mount`.
 * Copies the just-built binaries from your virtual Ubuntu instance to source's `build_mount/manual_build` directory.
 
@@ -152,8 +153,16 @@ H1iw5ZNxEZQB9Qs81TfYDwM2TbyrZ2e4TERdLQpEGdNs
 
 To spin up an Ubuntu instance called `solana-quick-node` with [`solana`](https://github.com/solana-labs/solana) installed from the binaries you just built above:
 
+:warning: Before building, on your machine run:
+
+```
+:~$ multipass networks
+```
+
+Choose the network you are using from the output list. Update the `time multipass launch` line's `--network` option from 'Ethernet' to whatever your network is. You do not have to do this if you do not care to connect to this node from outside the VM.
+
 ```python
-ahester@DESKTOP:~$ ./spin_up_new_node_from_binaries.sh
+:~$ ./spin_up_new_node_from_binaries.sh
 ```
 
 On my machine in took 1m55s to build the node from prebuilt binaries using shared mounts.
@@ -170,6 +179,7 @@ sys     0m0.015s
 
 After initializing the node with multipass, `spin_up_new_node_from_binaries.sh` will then:
 
+* Install `rust` and `cargo`.
 * Mounts the source machine's `build_mount` directory to the same directory in `solana-quick-node:~/build_mount`.
 * Copies the previously-built binaries from the mounted volume to virtual Ubuntus `~/.local/share/solana/install...` directory.
 * Set up target's `PATH` in `~/.profile`.
