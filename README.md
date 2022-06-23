@@ -38,6 +38,8 @@ user    0m0.000s
 sys     0m0.000s
 ```
 
+### Spin-Up Script Effects
+
 After building, the `spin_up_rust_builder.sh` script then:
 
 * Install `rust` and `cargo`.
@@ -153,13 +155,18 @@ H1iw5ZNxEZQB9Qs81TfYDwM2TbyrZ2e4TERdLQpEGdNs
 
 To spin up an Ubuntu instance called `solana-quick-node` with [`solana`](https://github.com/solana-labs/solana) installed from the binaries you just built above:
 
-:warning: Before building, on your machine run:
+
+### Enable Networking on Multipass Instance
+
+:warning: Before spinning up your new node, on your machine run:
 
 ```
 :~$ multipass networks
 ```
 
-Choose the network you are using from the output list. Update the `time multipass launch` line's `--network` option from 'Ethernet' to whatever your network is. You do not have to do this if you do not care to connect to this node from outside the VM.
+Choose the network you are using from the output list. Update the `time multipass launch` line's `--network` option from 'Ethernet' to whatever your network is. You do not have to do this if you do not care to connect to this node's RPC from outside the VM.
+
+### Create Solana Quick Node
 
 ```python
 :~$ ./spin_up_new_node_from_binaries.sh
@@ -176,6 +183,8 @@ real    1m54.921s
 user    0m0.000s
 sys     0m0.015s
 ```
+
+### Spin-Up Script Effects
 
 After initializing the node with multipass, `spin_up_new_node_from_binaries.sh` will then:
 
